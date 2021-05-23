@@ -12,6 +12,7 @@ public class Main {
     - Game loop
 
    RENDER TODO:
+    - render logic (probably render area around last play || around current players last play || at selected location)
     - look of board
     - either render with something later (swing || awt) || do some beautiful console fuckery to atleast make it bearable
       (more into console tbh, too much hassle otherwise)

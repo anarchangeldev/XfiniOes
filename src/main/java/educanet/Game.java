@@ -12,87 +12,29 @@ public class Game {
 
 
     public static void init() {
-        charCreation();
-        if (players.size() == 0) throw new Error("no players");
-        test();//start();
+        Scanner sc = new Scanner(System.in);
+        Logic.charCreation(sc);
+        Render.showPlayers(players);
+
+        //test(sc);
+        gameLoop(sc);
     }
 
-    public static void start() {
-        int playingID = 1; //player on turn
-        int wonID = 0; //ID of player who has won || no player with ID 0
+    public static void gameLoop(Scanner sc) {
+        int wonID = 0; //ID of player who has won !no player with ID 0!
 
         while(wonID == 0) {
-
-            //TODO
-            board = Board.getBoardList();
-            wonID = Logic.checkWin(players);
-            if(playingID < players.size()+1) playingID++; else playingID = 1;
-        }
-    }
-
-    public static void charCreation() {
-        boolean continueCreation = true;
-        Scanner sc = new Scanner(System.in);
-
-
-
-        while (continueCreation) {
-
-            //selection
-            System.out.println("Do you want to add a (P)layer || (A)I or (E)xit creation?");
-            String selection = sc.nextLine().toUpperCase();
-
-
-            //validate selection
-            if (!(selection.equals("P") || selection.equals("A") || selection.equals("E"))) {
-                System.out.println("invalid selection");
-                continue;
+            for(Player player : players) {
+                Logic.turn(player);
+                board = Board.getBoardList();
+                wonID = Logic.checkWin(player);
             }
-
-            //create based on selection
-            switch (selection) {
-                case "P" -> createPlayer(sc, true);
-                case "A" -> createPlayer(sc, false);
-                case "E" -> {
-                    System.out.println("EXITING...");
-                    continueCreation = false;
-                }
-            } //switch end
-
-        } //while loop end
-
-    }
-
-    public static void createPlayer(Scanner sc, boolean player) {
-        // VARIABLES
-        String type = (player) ? "player" : "AI";
-        String name;
-        String symbol;
-        int ID = players.size()+1;
-        boolean invalidSymbol = false;
-
-        // NAME SELECT
-        System.out.println("What do you want to name the " + type + "?");
-        name = sc.nextLine();
-
-        // SYMBOL SELECT
-
-        System.out.println("What symbol will " + name + " use?");
-        symbol = sc.nextLine();
-
-        //SYMBOL VALIDATION -> could be simplified
-        if(usedSymbols.contains(symbol)) {System.out.println("Symbol is already used by another Agent. Choose a different one:"); invalidSymbol = true; }
-        while (invalidSymbol) {
-
-            symbol = sc.nextLine();
-            if(usedSymbols.contains(symbol)) System.out.println("Symbol is already used by another Agent. Choose a different one:");
-            else { usedSymbols.add(symbol); invalidSymbol = false; }
         }
 
-        if (type.equals("player")) players.add(new Player(name, symbol, ID));
-        else                       players.add(new AI(name, symbol, ID));
-
+        Logic.win(wonID);
     }
+
+//------------- GETTERS ---------------------
 
     public static ArrayList<Player> getPlayers() {
         return players;
@@ -109,20 +51,21 @@ public class Game {
 //-----------------------------------------
 
 
-    public static void test() {
+    public static void test(Scanner sc) {
 
-        Board.play(1, 10,10);
-        Board.play(1, 9,10);
-        Board.play(1, 8,10);
-        Board.play(1, 7,10);
+        Logic.play(10, 10, new Player("test 1", "x", 1));
+        Logic.play(2, 4,   new Player("test 2", "o", 2));
+        Logic.play(0,0,    new Player("test 3", "z", 3));
+        Logic.play(30,0,   new Player("test 4", "s", 4));
+        Logic.play(15, 5,  new Player("test 5", "a", 5));
+        Logic.play(9, 10,  new Player("test 1", "x", 1));
+        Logic.play(8, 10,  new Player("test 1", "x", 1));
+        Logic.play(7, 10,  new Player("test 1", "x", 1));
 
-        Board.play(2, 2,4);
-        Board.play(3,0,0);
-        Board.play(4,30,0);
-        Board.play(5, 15, 5);
 
         System.out.println("----------------------");
         Render.printWholeBoard(Board.getBoardList(), "- ");
 
+        System.exit(0);
     }
 }

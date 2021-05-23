@@ -7,12 +7,14 @@ public class Player {
     private String name;
     private String symbol;
     private final int ID;
+
     private ArrayList<int[]> playHistory = new ArrayList<>(); //UNUSED -> maybe can speed up the checkWin method later
 
     public Player(String name, String symbol, int ID) {
         this.name = name;
         this.symbol = symbol;
         this.ID = ID;
+
     }
 
     public String getName() {
@@ -42,5 +44,6 @@ public class Player {
     public void savePlay(int x, int y) {
         savePlay(new int[]{x,y});
     }
+
 
 }

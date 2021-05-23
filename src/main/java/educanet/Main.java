@@ -2,24 +2,29 @@ package educanet;
 
 public class Main {
 
-    //GAME TODO:
-    // init of game (num of players//AIs)
-    // look of player (symbol // number)
-    // Game loop
+    /*
 
-    //BOARD TODO:
-    // look of board
+    LOGIC TODO:
+    - check win || -> alternate version to search in players play history;
+    - some logic tied to game loop maybe
 
-    //LOGIC TODO:
-    //check win
-    //some logic tied to game loop maybe
+    GAME TODO:
+    - Game loop
 
-    //AI TODO:
-    //everything.... holy fuck.
+   RENDER TODO:
+    - look of board
+    - either render with something later (swing || awt) || do some beautiful console fuckery to atleast make it bearable
+      (more into console tbh, too much hassle otherwise)
 
+    AI TODO:
+    - everything.... holy fuck.
 
-    // either render with something later (swing || awt) || do some beautiful console fuckery to atleast make it bearable
-    // (more into console tbh, too much hassle otherwise)
+    GENERAL TODO:
+     - cleanup of code
+     - commenting of code
+     - method description
+
+    */
 
 
     public static void main(String[] args) {

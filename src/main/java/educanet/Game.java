@@ -7,6 +7,8 @@ public class Game {
 
     public static ArrayList<Player> players = new ArrayList<>();
     public static ArrayList<String> usedSymbols = new ArrayList<>();
+    public static ArrayList<int[]> board = new ArrayList<>();
+
 
 
     public static void init() {
@@ -22,8 +24,8 @@ public class Game {
         while(wonID == 0) {
 
             //TODO
-
-            wonID = Logic.checkWin();
+            board = Board.getBoardList();
+            wonID = Logic.checkWin(players);
             if(playingID < players.size()+1) playingID++; else playingID = 1;
         }
     }
@@ -92,12 +94,19 @@ public class Game {
 
     }
 
+    public static ArrayList<Player> getPlayers() {
+        return players;
+    }
 
+    public static ArrayList<String> getUsedSymbols() {
+        return usedSymbols;
+    }
 
+    public static ArrayList<int[]> getBoard() {
+        return board;
+    }
 
-
-
-    //-----------------------------------------
+//-----------------------------------------
 
 
     public static void test() {
@@ -112,11 +121,8 @@ public class Game {
         Board.play(4,30,0);
         Board.play(5, 15, 5);
 
-
-        //Render.printBoardFromArray(Board.getBoardArray());
-
         System.out.println("----------------------");
-        Render.printBoard(Board.getBoardList(), "- ");
+        Render.printWholeBoard(Board.getBoardList(), "- ");
 
     }
 }

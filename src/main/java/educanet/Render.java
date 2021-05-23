@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Render {
     //TODO REWORK
-    public static void printBoard(ArrayList<int[]> board, String emptyChar) {
-        for (int y = 0; y <= Board.getMaxY(board); y++) {
-            for (int x = 0; x <= Board.getMaxX(board); x++) {
+    public static void printWholeBoard(ArrayList<int[]> board, String emptyChar) {
+        for (int y = 0; y <= Logic.getMaxY(board); y++) {
+            for (int x = 0; x <= Logic.getMaxX(board); x++) {
 
-                int[] pos = Board.findPos(x, y);
+                int[] pos = Logic.findPos(x, y, board);
 
                 if(pos != null) System.out.print(pos[2] + " ");
                 else            System.out.print(emptyChar);
@@ -18,7 +18,7 @@ public class Render {
         }
     }
 
-    public static void printBoardFromArray(int[][] board, String emptyChar) {
+    public static void printWholeBoard(int[][] board, String emptyChar) {
         for (int[] ints : board) {
             for (int content : ints) {
 
@@ -29,5 +29,9 @@ public class Render {
             System.out.println();
         }
     }
+
+    public static void printChunk(ArrayList<int[]> board, int startX, int startY, int chunkSize, String emptyChar) {}
+
+
 
 }

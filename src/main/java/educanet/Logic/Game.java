@@ -14,6 +14,8 @@ public class Game {
 
     public static long turns = 0;
 
+    public static String emptyChar = "-";
+
     public static void init() {
         Scanner sc = new Scanner(System.in);
         Logic.charCreation(sc);
@@ -21,6 +23,7 @@ public class Game {
 
         //test(sc);
         gameLoop(sc);
+        sc.close();
     }
 
     public static void gameLoop(Scanner sc) {
@@ -29,6 +32,7 @@ public class Game {
         while(wonID == 0) {
             for(Player player : players) {
                 turns++;
+                //Render.renderCycle(emptyChar);
                 Logic.turn(player, sc);
                 board = Board.getBoardList();
                 wonID = Logic.checkWin(player);
@@ -60,6 +64,8 @@ public class Game {
         return board;
     }
 
+    public static String getEmptyChar() { return emptyChar; }
+
 //-----------------------------------------
 
 
@@ -76,7 +82,7 @@ public class Game {
 
 
         System.out.println("----------------------");
-        Render.printWholeBoard(Board.getBoardList(), "- ");
+        Render.printWholeBoard(Board.getBoardList(), "-");
 
         System.exit(0);
     }

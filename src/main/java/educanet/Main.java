@@ -8,10 +8,6 @@ public class Main {
 
     LOGIC TODO:
     - check win || -> alternate version to search in players play history;
-    - some logic tied to game loop maybe
-
-    GAME TODO:
-    - Game loop
 
    RENDER TODO:
     - render logic (probably render area around last play || around current players last play || at selected location)
@@ -25,7 +21,7 @@ public class Main {
     GENERAL TODO:
      - cleanup of code
      - commenting of code
-     - method description
+     - better method description
 
     */
 
@@ -34,7 +30,6 @@ public class Main {
         Game.init();
     }
 
-
-
-
 }
+
+

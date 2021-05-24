@@ -11,7 +11,6 @@ public class Human extends Player{
 
     public void turn(Scanner sc) {
 
-
         long[] pos = Logic.choosePosition(sc);
 
         if (!Logic.legitMove(pos)) {

@@ -42,7 +42,7 @@ public class Logic {
     /**
      * returns 0 if no-one has won yet or ID of player, who has won
      */
-    public static int checkWin(Player currentPlayer) {
+    public static long checkWin(Player currentPlayer) {
         //TODO
 
 
@@ -50,20 +50,15 @@ public class Logic {
         return 0;
     }
 
-    /**
-     winner method.
-     * */
-    public static void win(int winnerID) {
-        Player winner = Logic.getPlayer(Game.getPlayers(), winnerID);
-    }
 
     /**
      * Makes the play on the board and saves it into the players history of plays
      */
-    public static void play(int x, int y, Player player) {
+    public static void play(long x, long y, Player player) {
         Board.play(player.getID(), x, y);
         player.savePlay(x,y);
     }
+    public static void play(long[] xy, Player player) {play(xy[0], xy[1], player);}
 
     /**
      * Checks if there are players or if the player is alone. (either gives option to exit, add more, or if the player is alone, adds a Hard AI)
@@ -91,12 +86,29 @@ public class Logic {
     /**
      What to do on turn -> AI logic || player input
      * */
-    public static void turn(Player player) {
-        if (player instanceof AI) {((AI) player).turn(); return;}
-        System.out.println("player" + player.getID());
+    public static void turn(Player player, Scanner sc) {
 
-        //TODO
+        if (player instanceof AI) { //AI play
+            System.out.println("AI: "+player.getName()+" ("+player.getID()+") is playing.");
+            ((AI) player).turn();
+            return;
+        }
 
+        if (player instanceof Human) { //Human play
+            System.out.println("Player: "+player.getName()+" ("+player.getID()+") is playing.");
+            ((Human) player).turn(sc);
+            return;
+        }
+        System.out.println(player.getName() + " ("+player.getSymbol()+") has ended their turn.");
+    }
+
+    public static long[] choosePosition(Scanner sc) {
+        System.out.println("Where do you want to put your symbol?\nX: ");
+        long x = sc.nextLong();
+        System.out.println("Y: ");
+        long y = sc.nextLong();
+
+        return new long[]{x,y};
     }
 
 
@@ -105,99 +117,122 @@ public class Logic {
     /**
      * returns the contents of the position, if the position hasn't been played yet, returns null
      */
-    public static int[] findPos(int x, int y, ArrayList<int[]> board) {
-        for (int[] position : board) {
+    public static long[] findPos(long x, long y, ArrayList<long[]> board) {
+        for (long[] position : board) {
             if(position[0] == x && position[1] == y) {
                 return position;
             }
         }
         return null;
     }
-
+    public static long[] findPos(long x, long y) {return findPos(x,y,Game.getBoard());}
+    public static long[] findPos(long[]xy) {return findPos(xy[0], xy[1]);}
     /**
      * Determines if the specified position is empty or not
      */
-    public static boolean legitMove(int x, int y, ArrayList<int[]> board) {
+    public static boolean legitMove(long x, long y, ArrayList<long[]> board) {
         return findPos(x, y, board) == null;
+    }
+    public static boolean legitMove(long x, long y) {
+        return legitMove(x,y,Game.getBoard());
+    }
+    public static boolean legitMove(long[] xy) {
+        return legitMove(xy[0], xy[1]);
     }
 
     /**
      * returns 0 if pos is empty
      */
-    public static int getPlayerID_AtPos(int x, int y, ArrayList<int[]> board) {
-        int[] pos = findPos(x, y, board);
+    public static long getPlayerID_AtPos(long x, long y, ArrayList<long[]> board) {
+        long[] pos = findPos(x, y, board);
 
         if(pos != null) return pos[2];
         else            return 0;
     }
+    public static long getPlayerID_AtPos(long x, long y) {return getPlayerID_AtPos(x,y, Game.getBoard());}
+    public static long getPlayerID_AtPos(long[]xy) {return getPlayerID_AtPos(xy[0], xy[1]);}
 
+    /**
+     * returns the player by his symbol, if not found, returns null
+     */
+    public static Player getPlayerBySymbol(String symbol, ArrayList<Player> players) {
+        for(Player player : players) {
+            if(player.getSymbol().equals(symbol)) return player;
+        }
+        return null;
+    }
+    public static Player getPlayerBySymbol(String symbol) {return getPlayerBySymbol(symbol, Game.getPlayers());}
     /**
      * returns the biggest X position from the ArrayList
      */
-    public static int getMaxX(ArrayList<int[]> board) {
+    public static long getMaxX(ArrayList<long[]> board) {
         if(board == null) return 0;
 
-        ArrayList<Integer> xPos = new ArrayList<>();
+        ArrayList<Long> xPos = new ArrayList<>();
 
         board.forEach(e -> xPos.add(e[0]));
 
         return Collections.max(xPos);
     }
+    public static long getMaxX() {return getMaxX(Game.getBoard());}
 
     /**
      * returns the biggest Y position from the ArrayList
      */
-    public static int getMaxY(ArrayList<int[]> board) {
+    public static long getMaxY(ArrayList<long[]> board) {
         if(board == null) return 0;
 
-        ArrayList<Integer> yPos = new ArrayList<>();
+        ArrayList<Long> yPos = new ArrayList<>();
 
         board.forEach(e -> yPos.add(e[1]));
 
         return Collections.max(yPos);
     }
+    public static long getMaxY() {return getMaxY(Game.getBoard());}
 
     /**
      * returns the smallest X position from the ArrayList
      */
-    public static int getMinX(ArrayList<int[]> board) {
+    public static long getMinX(ArrayList<long[]> board) {
         if(board == null) return 0;
-        ArrayList<Integer> xPos = new ArrayList<>();
+        ArrayList<Long> xPos = new ArrayList<>();
 
         board.forEach(e -> xPos.add(e[0]));
 
         return Collections.min(xPos);
     }
+    public static long getMinX() {return getMinX(Game.getBoard());}
 
     /**
      * returns the smallest Y position from the ArrayList
      */
-    public static int getMinY(ArrayList<int[]> board) {
+    public static long getMinY(ArrayList<long[]> board) {
         if(board == null) return 0;
-        ArrayList<Integer> yPos = new ArrayList<>();
+        ArrayList<Long> yPos = new ArrayList<>();
 
         board.forEach(e -> yPos.add(e[1]));
 
         return Collections.min(yPos);
     }
+    public static long getMinY() {return getMinY(Game.getBoard());}
 
     /**
      * converts arrayLists to an array dynamically
      */
-    public static int[][] convertToArray(ArrayList<int[]> boardList) {
-        int[][] board = new int[getMaxY(boardList)+getMinY(boardList)+2][getMaxX(boardList)+getMinX(boardList)+2]; //makes an array with the sizing of the biggest number inside the corresponding ArrayList
+    public static long[][] convertToArray(ArrayList<long[]> boardList) {
+        long[][] board = new long[(int) (getMaxY(boardList)+getMinY(boardList)+2)][(int) (getMaxX(boardList)+getMinX(boardList)+2)]; //makes an array with the sizing of the biggest number inside the corresponding ArrayList
 
-        for (int[] element : boardList) {
-            int x = element[0];
-            int y = element[1];
-            int playerID = element[2];
+        for (long[] element : boardList) {
+            int x = (int) element[0];
+            int y = (int) element[1];
+            long playerID = element[2];
 
             board[y][x] = playerID;
         }
 
         return board;
     }
-
+    public static long[][] convertToArray() {return convertToArray(Game.getBoard());}
 
     //---------- PLAYER LOGIC ---------------------
 
@@ -211,7 +246,7 @@ public class Logic {
         String name;
         String symbol;
         int AIdifficulty = 0;
-        int ID = Game.getPlayers().size()+1;
+        long ID = Game.getPlayers().size()+1;
         boolean invalidSymbol = false;
 
         // NAME SELECT
@@ -244,8 +279,8 @@ public class Logic {
         //-----
         Game.usedSymbols.add(symbol);
         //-----
-        if (player) Game.players.add(new Player(name, symbol, ID));
-        else        Game.players.add(new     AI(name, symbol, ID, AIdifficulty));
+        if (player) Game.players.add(new Human(name, symbol, ID));
+        else        Game.players.add(new    AI(name, symbol, ID, AIdifficulty));
 
     }
 
@@ -271,7 +306,7 @@ public class Logic {
     /**
      * returns null if no player is found
      */
-    public static Player getPlayer(ArrayList<Player> players, int targetID) {
+    public static Player getPlayer(ArrayList<Player> players, long targetID) {
         if(players == null) return null;
 
         for (Player player : players) {
@@ -280,10 +315,6 @@ public class Logic {
 
         return null;
     }
-
-
-
-
-
+    public static Player getPlayer(long targetID) {return getPlayer(Game.getPlayers(), targetID);}
 
 }

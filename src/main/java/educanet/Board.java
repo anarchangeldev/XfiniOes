@@ -2,31 +2,30 @@ package educanet;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Board {
 
     //------------- VARIABLES --------------------
 
     // [X, Y, playerID]
-    private static final ArrayList<int[]> boardXY = new ArrayList<>();
-    private static int[][] boardArray;
+    private static final ArrayList<long[]> boardXY = new ArrayList<>();
+    private static long[][] boardArray;
 
     //--------------------------------------------
     //                  METHODS
 
-    public static void play(int playerID, int X, int Y) {
-        boardXY.add(new int[]{X,Y,playerID});
+    public static void play(long playerID, long X, long Y) {
+        boardXY.add(new long[]{X,Y,playerID});
     }
 
-    public static ArrayList<int[]> getBoardList() {
+    public static ArrayList<long[]> getBoardList() {
         return boardXY;
     }
 
 //------------------------------------------------
 //                  DO NOT USE
 
-    public static int[][] getBoardArray() {
+    public static long[][] getBoardArray() {
         return boardArray;
     }
 

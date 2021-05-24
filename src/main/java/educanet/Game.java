@@ -7,9 +7,9 @@ public class Game {
 
     public static ArrayList<Player> players = new ArrayList<>();
     public static ArrayList<String> usedSymbols = new ArrayList<>();
-    public static ArrayList<int[]> board = new ArrayList<>();
+    public static ArrayList<long[]> board = new ArrayList<>();
 
-
+    public static long turns = 0;
 
     public static void init() {
         Scanner sc = new Scanner(System.in);
@@ -21,17 +21,26 @@ public class Game {
     }
 
     public static void gameLoop(Scanner sc) {
-        int wonID = 0; //ID of player who has won !no player with ID 0!
+        long wonID = 0; //ID of player who has won !no player with ID 0!
 
         while(wonID == 0) {
             for(Player player : players) {
-                Logic.turn(player);
+                turns++;
+                Logic.turn(player, sc);
                 board = Board.getBoardList();
                 wonID = Logic.checkWin(player);
             }
         }
+        win(wonID);
+    }
 
-        Logic.win(wonID);
+
+    /**
+     winner method.
+     * */
+    public static void win(long winnerID) {
+        Player winner = Logic.getPlayer(players, winnerID);
+        System.out.println(winner.getName() + " alias " + winner.getSymbol() + " has won the game in " + turns + " turns.");
     }
 
 //------------- GETTERS ---------------------
@@ -44,7 +53,7 @@ public class Game {
         return usedSymbols;
     }
 
-    public static ArrayList<int[]> getBoard() {
+    public static ArrayList<long[]> getBoard() {
         return board;
     }
 

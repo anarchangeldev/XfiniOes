@@ -9,6 +9,7 @@ public class Render {
         System.out.println("------------------------\nPlayers:\n");
         for (Player player : players) {
             boolean isAI = player instanceof AI;
+
             if(isAI) System.out.println("AI "     + player.getID() + ": ");
             else     System.out.println("Player " + player.getID() + ": ");
             System.out.println("- name: " + player.getName());
@@ -18,18 +19,18 @@ public class Render {
 
     }
 
-    public static void printChunk(ArrayList<int[]> board, int startX, int startY, int chunkSize, String emptyChar) {
+    public static void printChunk(ArrayList<long[]> board, long startX, long startY, long chunkSize, String emptyChar) {
         //TODO
     }
 
-    public static void printWholeBoard(ArrayList<int[]> board, String emptyChar) {
+    public static void printWholeBoard(ArrayList<long[]> board, String emptyChar) {
         //theoretically pretty fucking heavy and big loop
-        for (int y = Logic.getMinY(board); y <= Logic.getMaxY(board); y++) {
-            for (int x = Logic.getMinX(board); x <= Logic.getMaxX(board); x++) {
+        for (long y = Logic.getMinY(board); y <= Logic.getMaxY(board); y++) {
+            for (long x = Logic.getMinX(board); x <= Logic.getMaxX(board); x++) {
 
-                int[] pos = Logic.findPos(x, y, board);
+                long[] pos = Logic.findPos(x, y, board);
 
-                if(pos != null) System.out.print(pos[2] + " ");
+                if(pos != null) System.out.print(Logic.getPlayer(pos[2]).getSymbol() + " ");
                 else            System.out.print(emptyChar);
 
             }
@@ -37,9 +38,9 @@ public class Render {
         }
     }
 
-    public static void printWholeBoard(int[][] board, String emptyChar) {
-        for (int[] ints : board) {
-            for (int content : ints) {
+    public static void printWholeBoard(long[][] board, String emptyChar) {
+        for (long[] nums : board) {
+            for (long content : nums) {
 
                 if (content != 0) System.out.print(content + " ");
                 else System.out.print(emptyChar);

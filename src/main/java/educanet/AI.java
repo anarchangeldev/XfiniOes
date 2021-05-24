@@ -4,7 +4,7 @@ public class AI extends Player{
 
     private final int difficulty;
 
-    public AI(String name, String symbol, int ID, int difficulty) {
+    public AI(String name, String symbol, long ID, int difficulty) {
         super(name, symbol, ID);
         this.difficulty = difficulty;
     }
@@ -14,7 +14,7 @@ public class AI extends Player{
     }
 
     public void turn() {
-        System.out.println("AI" + getID());
+
         //TODO
     }
 }

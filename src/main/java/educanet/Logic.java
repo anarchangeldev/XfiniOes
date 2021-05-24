@@ -73,12 +73,12 @@ public class Logic {
             if (selection.equalsIgnoreCase("E"))        throw new Error("no players");
             else if (selection.equalsIgnoreCase("R"))   charCreation(sc);
             else {
-                System.out.println("rebellious rascal... I hope you just miss clicked");
+                System.out.println("rebellious rascal... I hope you just missclicked");
                 throw new Error("monke");
             } //elif end
         }//size if end
         if (Game.getPlayers().size() == 1) {
-            System.out.println("You cant play alone silly, I'll myself then, prepare...");
+            System.out.println("You cant play alone silly, I'll add myself then, prepare...");
             mastermindCreate();
         }
     }
@@ -89,13 +89,13 @@ public class Logic {
     public static void turn(Player player, Scanner sc) {
 
         if (player instanceof AI) { //AI play
-            System.out.println("AI: "+player.getName()+" ("+player.getID()+") is playing.");
+            System.out.println("AI"+player.getID()+": "+player.getName()+" ("+player.getSymbol()+") is playing.");
             ((AI) player).turn();
             return;
         }
 
         if (player instanceof Human) { //Human play
-            System.out.println("Player: "+player.getName()+" ("+player.getID()+") is playing.");
+            System.out.println("Player"+player.getID()+": "+player.getName()+" ("+player.getSymbol()+") is playing.");
             ((Human) player).turn(sc);
             return;
         }
@@ -143,25 +143,15 @@ public class Logic {
     /**
      * returns 0 if pos is empty
      */
-    public static long getPlayerID_AtPos(long x, long y, ArrayList<long[]> board) {
+    public static long getPlayerIDAtPos(long x, long y, ArrayList<long[]> board) {
         long[] pos = findPos(x, y, board);
 
         if(pos != null) return pos[2];
         else            return 0;
     }
-    public static long getPlayerID_AtPos(long x, long y) {return getPlayerID_AtPos(x,y, Game.getBoard());}
-    public static long getPlayerID_AtPos(long[]xy) {return getPlayerID_AtPos(xy[0], xy[1]);}
+    public static long getPlayerIDAtPos(long x, long y) {return getPlayerIDAtPos(x,y, Game.getBoard());}
+    public static long getPlayerIDAtPos(long[]xy) {return getPlayerIDAtPos(xy[0], xy[1]);}
 
-    /**
-     * returns the player by his symbol, if not found, returns null
-     */
-    public static Player getPlayerBySymbol(String symbol, ArrayList<Player> players) {
-        for(Player player : players) {
-            if(player.getSymbol().equals(symbol)) return player;
-        }
-        return null;
-    }
-    public static Player getPlayerBySymbol(String symbol) {return getPlayerBySymbol(symbol, Game.getPlayers());}
     /**
      * returns the biggest X position from the ArrayList
      */
@@ -306,7 +296,7 @@ public class Logic {
     /**
      * returns null if no player is found
      */
-    public static Player getPlayer(ArrayList<Player> players, long targetID) {
+    public static Player getPlayerByID(ArrayList<Player> players, long targetID) {
         if(players == null) return null;
 
         for (Player player : players) {
@@ -315,6 +305,18 @@ public class Logic {
 
         return null;
     }
-    public static Player getPlayer(long targetID) {return getPlayer(Game.getPlayers(), targetID);}
+    public static Player getPlayerByID(long targetID) {return getPlayerByID(Game.getPlayers(), targetID);}
+
+
+    /**
+     * returns the player by his symbol, if not found, returns null
+     */
+    public static Player getPlayerBySymbol(String symbol, ArrayList<Player> players) {
+        for(Player player : players) {
+            if(player.getSymbol().equals(symbol)) return player;
+        }
+        return null;
+    }
+    public static Player getPlayerBySymbol(String symbol) {return getPlayerBySymbol(symbol, Game.getPlayers());}
 
 }

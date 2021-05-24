@@ -13,7 +13,7 @@ public class Human extends Player{
         long[] pos = Logic.choosePosition(sc);
 
         if (!Logic.legitMove(pos)) {
-            Player occupant = Logic.getPlayer(Logic.getPlayerID_AtPos(pos));
+            Player occupant = Logic.getPlayerByID(Logic.getPlayerIDAtPos(pos));
             System.out.println("Position already occupied by "+occupant.getName()+" ("+occupant.getSymbol()+"). choose another");
             turn(sc);
         }

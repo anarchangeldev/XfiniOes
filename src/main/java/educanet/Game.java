@@ -39,7 +39,7 @@ public class Game {
      winner method.
      * */
     public static void win(long winnerID) {
-        Player winner = Logic.getPlayer(players, winnerID);
+        Player winner = Logic.getPlayerByID(players, winnerID);
         System.out.println(winner.getName() + " alias " + winner.getSymbol() + " has won the game in " + turns + " turns.");
     }
 

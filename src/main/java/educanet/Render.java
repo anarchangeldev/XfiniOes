@@ -30,7 +30,7 @@ public class Render {
 
                 long[] pos = Logic.findPos(x, y, board);
 
-                if(pos != null) System.out.print(Logic.getPlayer(pos[2]).getSymbol() + " ");
+                if(pos != null) System.out.print(Logic.getPlayerByID(pos[2]).getSymbol() + " ");
                 else            System.out.print(emptyChar);
 
             }

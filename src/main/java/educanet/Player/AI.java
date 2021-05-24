@@ -1,4 +1,4 @@
-package educanet;
+package educanet.Player;
 
 public class AI extends Player{
 

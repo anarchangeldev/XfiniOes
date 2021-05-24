@@ -1,4 +1,7 @@
-package educanet;
+package educanet.Presentation;
+
+import educanet.Logic.Logic;
+import educanet.Player.*;
 
 import java.util.ArrayList;
 

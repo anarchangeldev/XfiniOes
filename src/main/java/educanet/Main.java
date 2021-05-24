@@ -1,5 +1,7 @@
 package educanet;
 
+import educanet.Logic.Game;
+
 public class Main {
 
     /*

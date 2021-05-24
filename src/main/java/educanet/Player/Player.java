@@ -1,4 +1,4 @@
-package educanet;
+package educanet.Player;
 
 import java.util.ArrayList;
 

@@ -1,14 +1,16 @@
-educanet/Board.java
- educanet.Board
-educanet/Player.java
- educanet.Player
-educanet/Render.java
- educanet.Render
-educanet/AI.java
- educanet.AI
-educanet/Logic.java
- educanet.Logic
-educanet/Game.java
- educanet.Game
+educanet/Presentation/Render.java
+ educanet.Presentation.Render
+educanet/Logic/Game.java
+ educanet.Logic.Game
+educanet/Player/AI.java
+ educanet.Player.AI
+educanet/Logic/Board.java
+ educanet.Logic.Board
+educanet/Player/Player.java
+ educanet.Player.Player
+educanet/Logic/Logic.java
+ educanet.Logic.Logic
 educanet/Main.java
  educanet.Main
+educanet/Player/Human.java
+ educanet.Player.Human

@@ -1,4 +1,4 @@
-package educanet;
+package educanet.Logic;
 
 
 import java.util.ArrayList;

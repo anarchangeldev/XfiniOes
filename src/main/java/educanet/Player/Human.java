@@ -1,4 +1,6 @@
-package educanet;
+package educanet.Player;
+
+import educanet.Logic.Logic;
 
 import java.util.Scanner;
 

@@ -1,4 +1,6 @@
-package educanet;
+package educanet.Logic;
+
+import educanet.Player.*;
 
 import java.util.*;
 
@@ -125,7 +127,7 @@ public class Logic {
         }
         return null;
     }
-    public static long[] findPos(long x, long y) {return findPos(x,y,Game.getBoard());}
+    public static long[] findPos(long x, long y) {return findPos(x,y, Game.getBoard());}
     public static long[] findPos(long[]xy) {return findPos(xy[0], xy[1]);}
     /**
      * Determines if the specified position is empty or not
@@ -134,7 +136,7 @@ public class Logic {
         return findPos(x, y, board) == null;
     }
     public static boolean legitMove(long x, long y) {
-        return legitMove(x,y,Game.getBoard());
+        return legitMove(x,y, Game.getBoard());
     }
     public static boolean legitMove(long[] xy) {
         return legitMove(xy[0], xy[1]);

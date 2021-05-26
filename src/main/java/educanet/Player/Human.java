@@ -1,5 +1,7 @@
 package educanet.Player;
 
+import educanet.Logic.Board;
+import educanet.Logic.Game;
 import educanet.Logic.Logic;
 
 import java.util.Scanner;
@@ -9,16 +11,16 @@ public class Human extends Player{
         super(name, symbol, ID);
     }
 
-    public void turn(Scanner sc) {
+    public void turn(Scanner sc, Logic l, Board b, Game g) {
 
-        long[] pos = Logic.choosePosition(sc);
+        long[] pos = l.choosePosition(sc);
 
-        if (!Logic.legitMove(pos)) {
-            Player occupant = Logic.getPlayerByID(Logic.getPlayerIDAtPos(pos));
+        if (!l.legitMove(pos, g)) {
+            Player occupant = l.getPlayerByID(l.getPlayerIDAtPos(pos, g), g);
             System.out.println("Position already occupied by "+occupant.getName()+" ("+occupant.getSymbol()+"). choose another");
-            turn(sc);
+            turn(sc, l , b, g);
         }
-        Logic.play(pos, this);
+        l.play(pos, this, b);
 
     }
 

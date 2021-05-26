@@ -12,24 +12,26 @@ public class Render {
      * @param players players in game
      * @param board the game field
      */
-    public static void renderCycle(ArrayList<Player> players, ArrayList<long[]> board, String emptyChar, long startX, long startY, long chunkSize) {
+    public void renderCycle(ArrayList<Player> players, ArrayList<long[]> board, String emptyChar, long startX, long startY, long chunkSize, Logic l, Game g) {
         showPlayers(players);
         printChunk(board, startX, startY, chunkSize, emptyChar);
-        printWholeBoard(board,emptyChar); //remove later
+        printWholeBoard(board,emptyChar, l, g); //remove later
     }
-    public static void renderCycle(String emptyChar, long startX, long startY, long chunkSize) {renderCycle(Game.getPlayers(), Game.getBoard(), emptyChar, startX, startY, chunkSize);}
-    public static void renderCycle(String emptyChar, long[] xy, long chunkSize) {renderCycle(emptyChar, xy[0], xy[1], chunkSize);}
-    public static void renderCycle(String emptyChar, long[]xySize) {renderCycle(emptyChar,xySize[0], xySize[1],xySize[2]);}
-    public static void renderCycle(long startX, long startY, long chunkSize) {renderCycle(Game.getEmptyChar(), startX, startY, chunkSize);}
-    public static void renderCycle(long[]xy, long chunkSize) {renderCycle(Game.getEmptyChar(),xy, chunkSize);}
-    public static void renderCycle(long[]xySize) {renderCycle(Game.getEmptyChar(),xySize);}
+    //region renderCycle overloading
+    public void renderCycle(String emptyChar, long startX, long startY, long chunkSize, Logic l, Game g) {renderCycle(g.getPlayers(), g.getBoard(), emptyChar, startX, startY, chunkSize, l, g);}
+    public void renderCycle(String emptyChar, long[] xy, long chunkSize, Logic l, Game g) {renderCycle(emptyChar, xy[0], xy[1], chunkSize,l, g);}
+    public void renderCycle(String emptyChar, long[]xySize, Logic l, Game g) {renderCycle(emptyChar,xySize[0], xySize[1],xySize[2],l, g);}
+    public void renderCycle(long startX, long startY, long chunkSize, Logic l, Game g) {renderCycle(g.getEmptyChar(), startX, startY, chunkSize,l, g);}
+    public void renderCycle(long[]xy, long chunkSize, Logic l, Game g) {renderCycle(g.getEmptyChar(),xy, chunkSize,l, g);}
+    public void renderCycle(long[]xySize, Logic l, Game g) {renderCycle(g.getEmptyChar(),xySize,l, g);}
+    //endregion
 
 
     /**
      * displays players
      * @param players players in game
      */
-    public static void showPlayers(ArrayList<Player> players) {
+    public void showPlayers(ArrayList<Player> players) {
 
         System.out.println("------------------------\nPlayers:\n");
         for (Player player : players) {
@@ -43,7 +45,7 @@ public class Render {
         }
         System.out.println("------------------------");
     }
-    public static void showPlayers() {showPlayers(Game.getPlayers());}
+    public void showPlayers(Game g) {showPlayers(g.getPlayers());}
 
     /**
      * displays chunk from given XY with given reach and fills empty fields with given string
@@ -53,38 +55,38 @@ public class Render {
      * @param chunkSize render reach
      * @param emptyChar filler char
      */
-    public static void printChunk(ArrayList<long[]> board, long startX, long startY, long chunkSize, String emptyChar) {
+    public void printChunk(ArrayList<long[]> board, long startX, long startY, long chunkSize, String emptyChar) {
         //TODO
     }
-    public static void printChunk(ArrayList<long[]> board, long[]xy, long chunkSize, String emptyChar) {printChunk(board, xy[0], xy[1], chunkSize, emptyChar); }
-    public static void printChunk(long[]xy, long chunkSize, String emptyChar) { printChunk(Game.getBoard(),xy, chunkSize, emptyChar);}
+    public void printChunk(ArrayList<long[]> board, long[]xy, long chunkSize, String emptyChar) {printChunk(board, xy[0], xy[1], chunkSize, emptyChar); }
+    public void printChunk(long[]xy, long chunkSize, String emptyChar, Game g) { printChunk(g.getBoard(),xy, chunkSize, emptyChar);}
 
     //--------- TEST ------------
 
+    //region testbed
     /**
      * prints the whole board
      * @param board game field
      * @param emptyChar filler char
      */
-    public static void printWholeBoard(ArrayList<long[]> board, String emptyChar) {
+    public void printWholeBoard(ArrayList<long[]> board, String emptyChar, Logic l, Game g) {
         //theoretically pretty fucking heavy and big loop
-        for (long y = Logic.getMinY(board); y <= Logic.getMaxY(board); y++) {
-            for (long x = Logic.getMinX(board); x <= Logic.getMaxX(board); x++) {
+        for (long y = l.getMinY(board); y <= l.getMaxY(board); y++) {
+            for (long x = l.getMinX(board); x <= l.getMaxX(board); x++) {
 
-                long[] pos = Logic.findPos(x, y, board);
+                long[] pos = l.findPos(x, y, board);
 
-                if(pos != null) System.out.print(Logic.getPlayerByID(pos[2]).getSymbol() + " ");
+                if(pos != null) System.out.print(l.getPlayerByID(pos[2], g).getSymbol() + " ");
                 else            System.out.print(emptyChar+" ");
 
             }
             System.out.println();
         }
     }
-    public static void printWholeBoard(String emptyChar) { printWholeBoard(Game.getBoard(), emptyChar); }
 
 
     //----- DO NOT USE -----------
-    public static void printWholeBoard(long[][] board, String emptyChar) {
+    public void printWholeBoard(long[][] board, String emptyChar) {
         for (long[] nums : board) {
             for (long content : nums) {
 
@@ -95,4 +97,5 @@ public class Render {
             System.out.println();
         }
     }
+    //endregion
 }

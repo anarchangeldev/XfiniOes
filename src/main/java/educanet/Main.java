@@ -3,7 +3,7 @@ package educanet;
 import educanet.Logic.Game;
 
 public class Main {
-
+    public static Game g = new Game();
     /*
 
     LOGIC TODO:
@@ -27,7 +27,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-        Game.init();
+        g.init();
     }
 
 }

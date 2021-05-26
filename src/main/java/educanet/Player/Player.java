@@ -1,6 +1,7 @@
 package educanet.Player;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Player {
 
@@ -41,9 +42,21 @@ public class Player {
         playHistory.add(pos);
     }
 
+    public ArrayList<long[]> getPlayHistory() {
+        return playHistory;
+    }
+
+    public long[] getLastPlay() {
+        if (playHistory == null || playHistory.size() == 0) {
+            return null;
+        }
+        return playHistory.get(playHistory.size()-1);
+    }
+
     public void savePlay(long x, long y) {
         savePlay(new long[]{x,y});
     }
+
 
 
 }

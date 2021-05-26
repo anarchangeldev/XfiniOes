@@ -8,24 +8,24 @@ public class Board {
     //------------- VARIABLES --------------------
 
     // [X, Y, playerID]
-    private static final ArrayList<long[]> boardXY = new ArrayList<>();
-    private static long[][] boardArray;
+    private final ArrayList<long[]> boardXY = new ArrayList<>();
+    private long[][] boardArray;
 
     //--------------------------------------------
     //                  METHODS
 
-    public static void play(long playerID, long X, long Y) {
+    public void play(long playerID, long X, long Y) {
         boardXY.add(new long[]{X,Y,playerID});
     }
 
-    public static ArrayList<long[]> getBoardList() {
+    public ArrayList<long[]> getBoardList() {
         return boardXY;
     }
 
 //------------------------------------------------
 //                  DO NOT USE
 
-    public static long[][] getBoardArray() {
+    public long[][] getBoardArray() {
         return boardArray;
     }
 

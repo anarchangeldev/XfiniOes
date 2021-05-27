@@ -10,38 +10,6 @@ public class Logic {
     //------------ GAME LOGIC -------------
 
     //region Game Logic
-    /**
-     *  Creates players || AI agents
-     */
-    public void charCreation(Scanner sc, Game g) {
-        boolean continueCreation = true;
-        String[] validAnswers = new String[]{"P", "A", "E"};
-        while (continueCreation) {
-
-            //selection
-            System.out.println("Do you want to add a (P)layer || (A)I or (E)xit creation?");
-            String selection = sc.nextLine().toUpperCase();
-
-
-            //validate selection
-            if (!(Arrays.asList(validAnswers).contains(selection))) {
-                System.out.println("invalid selection");
-                continue;
-            }
-
-            //create based on selection
-            switch (selection) {
-                case "P" -> createPlayer(sc, true, g);
-                case "A" -> createPlayer(sc, false, g);
-                case "E" -> {
-                    System.out.println("EXITING...");
-                    continueCreation = false;
-                }
-            } //switch end
-
-        } //while loop end
-        playerCountCheck(sc, g);
-    }
 
     /**
      * checks if last player has won
@@ -67,6 +35,65 @@ public class Logic {
         if (lastPlayOfPlayer == null) return false;
 
 
+        //todo
+
+        return symbolCount == g.symbolWinCount;
+    }
+
+    public boolean checkWinTwo(Player player, ArrayList<String[]> board, Game g) {
+        String[] lastPlayOfPlayer = player.getLastPlay();
+        if (lastPlayOfPlayer == null) return false;
+        String x = lastPlayOfPlayer[0];
+        String y = lastPlayOfPlayer[1];
+        if(x == null || y == null || x.equals("") || y.equals("")) return false;
+        int symbolCount = 1;
+        String s = player.getID();
+        int n = g.symbolWinCount;
+
+        //check col
+        for(int i = 0; i < n; i++){
+            if(findPos(x,NumToString(i),g) == null) break;
+            if(!findPos(x,NumToString(i),g)[2].equals(s))
+                break;
+            if(i == n-1){
+                return true;
+            }
+        }
+
+        //check row
+        for(int i = 0; i < n; i++){
+            if(findPos(NumToString(i),y,g) == null) break;
+            if(!findPos(NumToString(i),y,g)[2].equals(s))
+                break;
+            if(i == n-1){
+                return true;
+            }
+        }
+
+        //check diag
+        if(x.equals(y)){
+            //we're on a diagonal
+            for(int i = 0; i < n; i++){
+                if(findPos(NumToString(i),NumToString(i),g) == null) break;
+                if(!findPos(NumToString(i),NumToString(i),g)[2].equals(s))
+                    break;
+                if(i == n-1){
+                    return true;
+                }
+            }
+        }
+
+        //check anti diag
+        if(NumToString(StringToLong(x) + StringToLong(y)).equals(NumToString(n-1))){
+            for(int i = 0; i < n; i++){
+                if(findPos(NumToString(i),NumToString((n-1)-i),g) == null) break;
+                if(!findPos(NumToString(i),NumToString((n-1)-i),g)[2].equals(s))
+                    break;
+                if(i == n-1){
+                    return true;
+                }
+            }
+        }
 
         return symbolCount == g.symbolWinCount;
     }
@@ -132,8 +159,7 @@ public class Logic {
             try {
                 System.out.println("X: ");
                 x = sc.nextLine();
-                Long.parseLong(x);
-                break;
+                StringToLong(x);
             } catch(NumberFormatException e) {
                 System.out.println("invalid input");
             }
@@ -141,7 +167,7 @@ public class Logic {
             try {
                 System.out.println("Y: ");
                 y = sc.nextLine();
-                Long.parseLong(y);
+                StringToLong(y);
                 break;
             } catch(NumberFormatException e) {
                 System.out.println("invalid input");
@@ -252,13 +278,13 @@ public class Logic {
      */
     public String[][] convertToArray(ArrayList<String[]> boardList) {
         String[][] board =
-                new String[(Integer.parseInt(getMaxY(boardList))+Integer.parseInt(getMinY(boardList)))+2]
-                          [(Integer.parseInt(getMaxX(boardList))+Integer.parseInt(getMinX(boardList)))+2];
+                new String[(StringToInt(getMaxY(boardList))+StringToInt(getMinY(boardList)))+2]
+                          [(StringToInt(getMaxX(boardList))+StringToInt(getMinX(boardList)))+2];
         //makes an array with the sizing of the biggest number inside the corresponding ArrayList
 
         for (String[] element : boardList) {
-            int x = Integer.parseInt(element[0]);
-            int y = Integer.parseInt(element[1]);
+            int x = StringToInt(element[0]);
+            int y = StringToInt(element[1]);
             String playerID = element[2];
 
             board[y][x] = playerID;
@@ -272,6 +298,40 @@ public class Logic {
     //---------- PLAYER LOGIC ---------------------
 
     //region Player Logic
+
+    /**
+     *  Creates players || AI agents
+     */
+    public void charCreation(Scanner sc, Game g) {
+        boolean continueCreation = true;
+        String[] validAnswers = new String[]{"P", "A", "E"};
+        while (continueCreation) {
+
+            //selection
+            System.out.println("Do you want to add a (P)layer || (A)I or (E)xit creation?");
+            String selection = sc.nextLine().toUpperCase();
+
+
+            //validate selection
+            if (!(Arrays.asList(validAnswers).contains(selection))) {
+                System.out.println("invalid selection");
+                continue;
+            }
+
+            //create based on selection
+            switch (selection) {
+                case "P" -> createPlayer(sc, true, g);
+                case "A" -> createPlayer(sc, false, g);
+                case "E" -> {
+                    System.out.println("EXITING...");
+                    continueCreation = false;
+                }
+            } //switch end
+
+        } //while loop end
+        playerCountCheck(sc, g);
+    }
+
     /**
      * creates a player or AI agent
      */
@@ -282,7 +342,7 @@ public class Logic {
         String name;
         String symbol;
         int AIdifficulty = 0;
-        String ID = String.valueOf(g.getPlayers().size()+1);
+        String ID = NumToString(g.getPlayers().size()+1);
 
         boolean invalidSymbol = false;
 
@@ -339,7 +399,7 @@ public class Logic {
         //if player uses M/m symbol
         if(!g.getPlayers().get(0).getSymbol().equalsIgnoreCase(mastermindSymbol)) {
             char[] alphabet = new char[26*2]; //a-zA-Z
-            for(int i = 0; i < 26; i++){
+            for(int i = 0; i < 26; i++) {
                 if(i+65 == 77) continue; //remove M m [ if(i+97 == 109) is valid too ] 77=M 109=m
                 alphabet[i] = (char)(97 + i);
                 alphabet[i+26] = (char)(65 + i);
@@ -379,4 +439,21 @@ public class Logic {
 
     //endregion
 
+    //--------- UTILITY ---------
+    //region Utility
+
+    public String NumToString(long num) {
+        return String.valueOf(num);
+    }
+
+    public Long StringToLong(String string) {
+        return Long.parseLong(string);
+    }
+
+    public int StringToInt(String string) {
+        return Integer.parseInt(string);
+    }
+
+
+    //endregion
 }

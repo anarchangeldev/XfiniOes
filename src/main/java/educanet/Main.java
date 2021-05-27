@@ -7,7 +7,9 @@ public class Main {
     /*
 
     LOGIC TODO:
-    - check win || -> alternate version to search in players play history;
+    - repair checkWin();
+    - 0;0 is centered
+    -check win to work with negative values
 
    RENDER TODO:
     - render logic (probably render area around last play || around current players last play || at selected location)

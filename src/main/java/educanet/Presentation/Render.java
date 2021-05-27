@@ -20,7 +20,7 @@ public class Render {
     //region renderCycle overloading
     public void renderCycle(String emptyChar, String startX, String startY, long chunkSize, Logic l, Game g) {renderCycle(g.getPlayers(), g.getBoard(), emptyChar, startX, startY, chunkSize, l, g);}
     public void renderCycle(String emptyChar, String[] xy, long chunkSize, Logic l, Game g) {renderCycle(emptyChar, xy[0], xy[1], chunkSize,l, g);}
-    public void renderCycle(String emptyChar, String[]xySize, Logic l, Game g) {renderCycle(emptyChar,xySize[0], xySize[1],Long.parseLong(xySize[2]),l, g);}
+    public void renderCycle(String emptyChar, String[]xySize, Logic l, Game g) {renderCycle(emptyChar,xySize[0], xySize[1],l.StringToLong(xySize[2]),l, g);}
     public void renderCycle(String startX, String startY, long chunkSize, Logic l, Game g) {renderCycle(g.getEmptyChar(), startX, startY, chunkSize,l, g);}
     public void renderCycle(String[]xy, long chunkSize, Logic l, Game g) {renderCycle(g.getEmptyChar(),xy, chunkSize,l, g);}
     public void renderCycle(String[]xySize, Logic l, Game g) {renderCycle(g.getEmptyChar(),xySize,l, g);}
@@ -71,10 +71,10 @@ public class Render {
      */
     public void printWholeBoard(ArrayList<String[]> board, String emptyChar, Logic l, Game g) {
         //theoretically pretty fucking heavy and big loop
-        for (long y = Long.parseLong(l.getMinY(board)); y <= Long.parseLong(l.getMaxY(board)); y++) {
-            for (long x = Long.parseLong(l.getMinX(board)); x <= Long.parseLong(l.getMaxX(board)); x++) {
+        for (long y = l.StringToLong(l.getMinY(board)); y <= l.StringToLong(l.getMaxY(board)); y++) {
+            for (long x = l.StringToLong(l.getMinX(board)); x <= l.StringToLong(l.getMaxX(board)); x++) {
 
-                String[] pos = l.findPos(String.valueOf(x), String.valueOf(y), board);
+                String[] pos = l.findPos(l.NumToString(x), l.NumToString(y), board);
 
                 if(pos != null) System.out.print(l.getPlayerByID(pos[2], g).getSymbol() + " ");
                 else            System.out.print(emptyChar+" ");

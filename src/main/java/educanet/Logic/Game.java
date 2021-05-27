@@ -40,7 +40,7 @@ public class Game {
                 //Render.renderCycle(emptyChar);
                 l.turn(player, sc, b, this);
                 board = b.getBoardList();
-                if(l.checkWin(player,board, this)) wonID = player.getID();
+                if(l.checkWinTwo(player,board, this)) wonID = player.getID();
             }
         }
         win(wonID);

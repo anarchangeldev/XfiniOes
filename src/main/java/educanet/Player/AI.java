@@ -4,7 +4,7 @@ public class AI extends Player{
 
     private final int difficulty;
 
-    public AI(String name, String symbol, long ID, int difficulty) {
+    public AI(String name, String symbol, String ID, int difficulty) {
         super(name, symbol, ID);
         this.difficulty = difficulty;
     }

@@ -46,56 +46,40 @@ public class Logic {
     /**
      * checks if last player has won
      */
-    public boolean checkWin(Player currentPlayer, ArrayList<long[]> board, int dir, Game g) {
+    public boolean checkWin(Player currentPlayer, ArrayList<String[]> board, int dir, Game g) {
         //TODO
         //search from the last played point of the player into all 4 direction for an unbroken chain of X players symbols
 
-
-        long[] lastPlayOfPlayer = currentPlayer.getLastPlay();
-        if (lastPlayOfPlayer == null) return false;
-
         //check 4 directions (horizontal, vert, diagonals) in both sides
         for (int i = 0; i < 4; i++) {
-            if(checkDir(i, board, g)) return true;
+            if(checkDir(i, board, g, currentPlayer)) return true;
         }
 
         return false;
     }
-    public boolean checkWin(Player currentPlayer, ArrayList<long[]> board, Game g) {return checkWin(currentPlayer, board, 0, g);}
+    public boolean checkWin(Player currentPlayer, ArrayList<String[]> board, Game g) {return checkWin(currentPlayer, board, 0, g);}
 
 
-    public boolean checkDir(int Dir, ArrayList<long[]> board, Game g) {
-        int symbolCount = 0;
+    public boolean checkDir(int Dir, ArrayList<String[]> board, Game g, Player player) {
+        int symbolCount = 1;
+
+        String[] lastPlayOfPlayer = player.getLastPlay();
+        if (lastPlayOfPlayer == null) return false;
 
 
 
         return symbolCount == g.symbolWinCount;
     }
 
-    /**
-     * checks if last player has won using an array mapping the surroundings (size of array is winSymbolCount * 2)
-     */
-    public boolean checkWinUsingArray(Player currentPlayer, ArrayList<long[]> board) {
-        //search from the last played point of the player for an unbroken chain of X players symbols using an array long[winSymbolCount][wSC]
-
-
-        long[] lastPlayOfPlayer = currentPlayer.getLastPlay();
-        if (lastPlayOfPlayer == null) return false;
-
-        //TODO
-
-        return true;
-    }
-
 
     /**
      * Makes the play on the board and saves it into the players history of plays
      */
-    public void play(long x, long y, Player player, Board b) {
+    public void play(String x, String y, Player player, Board b) {
         b.play(player.getID(), x, y);
         player.savePlay(x,y);
     }
-    public void play(long[] xy, Player player, Board b) {play(xy[0], xy[1], player, b);}
+    public void play(String[] xy, Player player, Board b) {play(xy[0], xy[1], player, b);}
 
     /**
      * Checks if there are players or if the player is alone. (either gives option to exit, add more, or if the player is alone, adds a Hard AI)
@@ -138,20 +122,32 @@ public class Logic {
         System.out.println(player.getName() + " ("+player.getSymbol()+") has ended their turn.");
     }
 
-    public long[] choosePosition(Scanner sc) {
-        long x,y;
+    public String[] choosePosition(Scanner sc) {
+        String x,y;
+        x = y = "";
         while(true) {
+
+            System.out.println("Where do you want to put your symbol?");
+
             try {
-                System.out.println("Where do you want to put your symbol?\nX: ");
-                x = sc.nextLong();
+                System.out.println("X: ");
+                x = sc.nextLine();
+                Long.parseLong(x);
+                break;
+            } catch(NumberFormatException e) {
+                System.out.println("invalid input");
+            }
+
+            try {
                 System.out.println("Y: ");
-                y = sc.nextLong();
+                y = sc.nextLine();
+                Long.parseLong(y);
                 break;
             } catch(NumberFormatException e) {
                 System.out.println("invalid input");
             }
         }
-        return new long[]{x,y};
+        return new String[]{x,y};
     }
     //endregion
 
@@ -162,112 +158,115 @@ public class Logic {
     /**
      * returns the contents of the position, if the position hasn't been played yet, returns null
      */
-    public long[] findPos(long x, long y, ArrayList<long[]> board) {
-        for (long[] position : board) {
-            if(position[0] == x && position[1] == y) {
+    public String[] findPos(String x, String y, ArrayList<String[]> board) {
+        for (String[] position : board) {
+            if(position[0].equals(x) && position[1].equals(y)) {
                 return position;
             }
         }
         return null;
     }
-    public long[] findPos(long x, long y, Game g) {return findPos(x,y, g.getBoard());}
-    public long[] findPos(long[]xy, Game g) {return findPos(xy[0], xy[1], g);}
+    public String[] findPos(String x, String y, Game g) {return findPos(x,y, g.getBoard());}
+    public String[] findPos(String[]xy, Game g) {return findPos(xy[0], xy[1], g);}
     /**
      * Determines if the specified position is empty or not
      */
-    public boolean legitMove(long x, long y, ArrayList<long[]> board) {
+    public boolean legitMove(String x, String y, ArrayList<String[]> board) {
         return findPos(x, y, board) == null;
     }
-    public boolean legitMove(long x, long y, Game g) {
+    public boolean legitMove(String x, String y, Game g) {
         return legitMove(x,y, g.getBoard());
     }
-    public boolean legitMove(long[] xy, Game g) {
+    public boolean legitMove(String[] xy, Game g) {
         return legitMove(xy[0], xy[1], g);
     }
 
     /**
      * returns 0 if pos is empty
      */
-    public long getPlayerIDAtPos(long x, long y, ArrayList<long[]> board) {
-        long[] pos = findPos(x, y, board);
+    public String getPlayerIDAtPos(String x, String y, ArrayList<String[]> board) {
+        String[] pos = findPos(x, y, board);
 
         if(pos != null) return pos[2];
-        else            return 0;
+        else            return null;
     }
-    public long getPlayerIDAtPos(long x, long y, Game g) {return getPlayerIDAtPos(x,y, g.getBoard());}
-    public long getPlayerIDAtPos(long[]xy, Game g) {return getPlayerIDAtPos(xy[0], xy[1], g);}
+    public String getPlayerIDAtPos(String x, String y, Game g) {return getPlayerIDAtPos(x,y, g.getBoard());}
+    public String getPlayerIDAtPos(String[]xy, Game g) {return getPlayerIDAtPos(xy[0], xy[1], g);}
 
     /**
      * returns the biggest X position from the ArrayList
      */
-    public long getMaxX(ArrayList<long[]> board) {
-        if(board == null) return 0;
+    public String getMaxX(ArrayList<String[]> board) {
+        if(board == null) return null;
 
-        ArrayList<Long> xPos = new ArrayList<>();
+        ArrayList<String> xPos = new ArrayList<>();
 
         board.forEach(e -> xPos.add(e[0]));
 
         return Collections.max(xPos);
     }
-    public long getMaxX(Game g) {return getMaxX(g.getBoard());}
+    public String getMaxX(Game g) {return getMaxX(g.getBoard());}
 
     /**
      * returns the biggest Y position from the ArrayList
      */
-    public long getMaxY(ArrayList<long[]> board) {
-        if(board == null) return 0;
+    public String getMaxY(ArrayList<String[]> board) {
+        if(board == null) return null;
 
-        ArrayList<Long> yPos = new ArrayList<>();
+        ArrayList<String> yPos = new ArrayList<>();
 
         board.forEach(e -> yPos.add(e[1]));
 
         return Collections.max(yPos);
     }
-    public long getMaxY(Game g) {return getMaxY(g.getBoard());}
+    public String getMaxY(Game g) {return getMaxY(g.getBoard());}
 
     /**
      * returns the smallest X position from the ArrayList
      */
-    public long getMinX(ArrayList<long[]> board) {
-        if(board == null) return 0;
-        ArrayList<Long> xPos = new ArrayList<>();
+    public String getMinX(ArrayList<String[]> board) {
+        if(board == null) return null;
+        ArrayList<String> xPos = new ArrayList<>();
 
         board.forEach(e -> xPos.add(e[0]));
 
         return Collections.min(xPos);
     }
-    public long getMinX(Game g) {return getMinX(g.getBoard());}
+    public String getMinX(Game g) {return getMinX(g.getBoard());}
 
     /**
      * returns the smallest Y position from the ArrayList
      */
-    public long getMinY(ArrayList<long[]> board) {
-        if(board == null) return 0;
-        ArrayList<Long> yPos = new ArrayList<>();
+    public String getMinY(ArrayList<String[]> board) {
+        if(board == null) return null;
+        ArrayList<String> yPos = new ArrayList<>();
 
         board.forEach(e -> yPos.add(e[1]));
 
         return Collections.min(yPos);
     }
-    public long getMinY(Game g) {return getMinY(g.getBoard());}
+    public String getMinY(Game g) {return getMinY(g.getBoard());}
 
     /**
      * converts arrayLists to an array dynamically
      */
-    public long[][] convertToArray(ArrayList<long[]> boardList) {
-        long[][] board = new long[(int) (getMaxY(boardList)+getMinY(boardList)+2)][(int) (getMaxX(boardList)+getMinX(boardList)+2)]; //makes an array with the sizing of the biggest number inside the corresponding ArrayList
+    public String[][] convertToArray(ArrayList<String[]> boardList) {
+        String[][] board =
+                new String[(Integer.parseInt(getMaxY(boardList))+Integer.parseInt(getMinY(boardList)))+2]
+                          [(Integer.parseInt(getMaxX(boardList))+Integer.parseInt(getMinX(boardList)))+2];
+        //makes an array with the sizing of the biggest number inside the corresponding ArrayList
 
-        for (long[] element : boardList) {
-            int x = (int) element[0];
-            int y = (int) element[1];
-            long playerID = element[2];
+        for (String[] element : boardList) {
+            int x = Integer.parseInt(element[0]);
+            int y = Integer.parseInt(element[1]);
+            String playerID = element[2];
 
             board[y][x] = playerID;
         }
 
         return board;
     }
-    public long[][] convertToArray(Game g) {return convertToArray(g.getBoard());}
+    public String[][] convertToArray(Game g) {return convertToArray(g.getBoard());}
     //endregion
 
     //---------- PLAYER LOGIC ---------------------
@@ -283,7 +282,8 @@ public class Logic {
         String name;
         String symbol;
         int AIdifficulty = 0;
-        long ID = g.getPlayers().size()+1;
+        String ID = String.valueOf(g.getPlayers().size()+1);
+
         boolean invalidSymbol = false;
 
         // NAME SELECT
@@ -347,22 +347,22 @@ public class Logic {
             int randomSymbol = new Random().nextInt(alphabet.length);
             mastermindSymbol = Character.toString(alphabet[randomSymbol]);
         }
-        g.players.add(new AI("mastermind",mastermindSymbol,1, 3));
+        g.players.add(new AI("mastermind",mastermindSymbol,"1", 3));
     }
 
     /**
      * returns null if no player is found
      */
-    public Player getPlayerByID(ArrayList<Player> players, long targetID) {
+    public Player getPlayerByID(ArrayList<Player> players, String targetID) {
         if(players == null) return null;
 
         for (Player player : players) {
-            if(player.getID() == targetID) return player;
+            if(player.getID().equals(targetID)) return player;
         }
 
         return null;
     }
-    public Player getPlayerByID(long targetID, Game g) {return getPlayerByID(g.getPlayers(), targetID);}
+    public Player getPlayerByID(String targetID, Game g) {return getPlayerByID(g.getPlayers(), targetID);}
 
 
     /**

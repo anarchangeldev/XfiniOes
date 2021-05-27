@@ -7,11 +7,11 @@ public class Player {
 
     private String name;
     private String symbol;
-    private final long ID;
+    private final String ID;
 
-    private ArrayList<long[]> playHistory = new ArrayList<>(); //UNUSED -> maybe can speed up the checkWin method later
+    private ArrayList<String[]> playHistory = new ArrayList<>(); //UNUSED -> maybe can speed up the checkWin method later
 
-    public Player(String name, String symbol, long ID) {
+    public Player(String name, String symbol, String ID) {
         this.name = name;
         this.symbol = symbol;
         this.ID = ID;
@@ -34,27 +34,27 @@ public class Player {
         this.symbol = symbol;
     }
 
-    public long getID() {
+    public String getID() {
         return ID;
     }
 
-    public void savePlay(long[] pos) {
+    public void savePlay(String[] pos) {
         playHistory.add(pos);
     }
 
-    public ArrayList<long[]> getPlayHistory() {
+    public ArrayList<String[]> getPlayHistory() {
         return playHistory;
     }
 
-    public long[] getLastPlay() {
+    public String[] getLastPlay() {
         if (playHistory == null || playHistory.size() == 0) {
             return null;
         }
         return playHistory.get(playHistory.size()-1);
     }
 
-    public void savePlay(long x, long y) {
-        savePlay(new long[]{x,y});
+    public void savePlay(String x, String y) {
+        savePlay(new String[]{x,y});
     }
 
 

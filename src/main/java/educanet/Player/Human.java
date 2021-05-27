@@ -7,13 +7,13 @@ import educanet.Logic.Logic;
 import java.util.Scanner;
 
 public class Human extends Player{
-    public Human(String name, String symbol, long ID) {
+    public Human(String name, String symbol, String ID) {
         super(name, symbol, ID);
     }
 
     public void turn(Scanner sc, Logic l, Board b, Game g) {
 
-        long[] pos = l.choosePosition(sc);
+        String[] pos = l.choosePosition(sc);
 
         if (!l.legitMove(pos, g)) {
             Player occupant = l.getPlayerByID(l.getPlayerIDAtPos(pos, g), g);

@@ -13,7 +13,7 @@ public class Game {
 
     public  ArrayList<Player> players = new ArrayList<>();
     public  ArrayList<String> usedSymbols = new ArrayList<>();
-    public  ArrayList<long[]> board = new ArrayList<>();
+    public  ArrayList<String[]> board = new ArrayList<>();
 
     public  long turns = 0;
     public  int symbolWinCount = 4;
@@ -32,9 +32,9 @@ public class Game {
     }
 
     public void gameLoop(Scanner sc) {
-        long wonID = 0; //ID of player who has won !no player with ID 0!
+        String wonID = "0"; //ID of player who has won !no player with ID 0!
 
-        while(wonID == 0) {
+        while(wonID.equals("0")) {
             for(Player player : players) {
                 turns++;
                 //Render.renderCycle(emptyChar);
@@ -50,7 +50,7 @@ public class Game {
     /**
      winner method.
      * */
-    public void win(long winnerID) {
+    public void win(String winnerID) {
         Player winner = l.getPlayerByID(players, winnerID);
         System.out.println(winner.getName() + " alias " + winner.getSymbol() + " has won the game in " + turns + " turns.");
     }
@@ -66,7 +66,7 @@ public class Game {
         return usedSymbols;
     }
 
-    public ArrayList<long[]> getBoard() {
+    public ArrayList<String[]> getBoard() {
         return board;
     }
 
@@ -79,18 +79,18 @@ public class Game {
     //region testbed
     public void test(Scanner sc) {
 
-        l.play(10, 10, new Player("test 1", "x", 1), b);
-        l.play(2, 4,   new Player("test 2", "o", 2), b);
-        l.play(0,0,    new Player("test 3", "z", 3), b);
-        l.play(30,0,   new Player("test 4", "s", 4), b);
-        l.play(15, 5,  new Player("test 5", "a", 5), b);
-        l.play(9, 10,  new Player("test 1", "x", 1), b);
-        l.play(8, 10,  new Player("test 1", "x", 1), b);
-        l.play(7, 10,  new Player("test 1", "x", 1), b);
+        l.play("10", "10", new Player("test 1", "x", "1"), b);
+        l.play("2", "4",   new Player("test 2", "o", "2"), b);
+        l.play("0","0",    new Player("test 3", "z", "3"), b);
+        l.play("30","0",   new Player("test 4", "s", "4"), b);
+        l.play("15", "5",  new Player("test 5", "a", "5"), b);
+        l.play("9", "10",  new Player("test 1", "x", "1"), b);
+        l.play("8", "10",  new Player("test 1", "x", "1"), b);
+        l.play("7", "10",  new Player("test 1", "x", "1"), b);
 
 
         System.out.println("----------------------");
-        r.printWholeBoard(b.getBoardList(), "-", l, this);
+        //r.printWholeBoard(b.getBoardList(), "-", l, this);
 
         System.exit(0);
     }

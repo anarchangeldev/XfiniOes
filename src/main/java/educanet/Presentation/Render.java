@@ -5,6 +5,7 @@ import educanet.Logic.Logic;
 import educanet.Player.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Render {
     /**
@@ -12,18 +13,28 @@ public class Render {
      * @param players players in game
      * @param board the game field
      */
-    public void renderCycle(ArrayList<Player> players, ArrayList<String[]> board, String emptyChar, String startX, String startY, long chunkSize, Logic l, Game g) {
+    public void renderCycle(ArrayList<Player> players, ArrayList<String[]> board, String emptyChar, String startX, String startY, long chunkSize, Logic l, Game g, Player player) {
         showPlayers(players);
-        printChunk(board, startX, startY, chunkSize, emptyChar);
-        printWholeBoard(board,emptyChar, l, g); //remove later
+        String[] playersLastPlay = player.getLastPlay();
+        if(playersLastPlay != null) {
+            System.out.println("last global play:\n\n");
+            printChunk(board, startX, startY, chunkSize, emptyChar, l, g);
+            System.out.println("\n\nYour last play:\n\n");
+            printChunk(board, playersLastPlay[0], playersLastPlay[1], chunkSize, emptyChar, l, g);
+        } else {
+            printChunk(board, startX, startY, chunkSize, emptyChar, l, g);
+        }
+
+
+
     }
     //region renderCycle overloading
-    public void renderCycle(String emptyChar, String startX, String startY, long chunkSize, Logic l, Game g) {renderCycle(g.getPlayers(), g.getBoard(), emptyChar, startX, startY, chunkSize, l, g);}
-    public void renderCycle(String emptyChar, String[] xy, long chunkSize, Logic l, Game g) {renderCycle(emptyChar, xy[0], xy[1], chunkSize,l, g);}
-    public void renderCycle(String emptyChar, String[]xySize, Logic l, Game g) {renderCycle(emptyChar,xySize[0], xySize[1],l.StringToLong(xySize[2]),l, g);}
-    public void renderCycle(String startX, String startY, long chunkSize, Logic l, Game g) {renderCycle(g.getEmptyChar(), startX, startY, chunkSize,l, g);}
-    public void renderCycle(String[]xy, long chunkSize, Logic l, Game g) {renderCycle(g.getEmptyChar(),xy, chunkSize,l, g);}
-    public void renderCycle(String[]xySize, Logic l, Game g) {renderCycle(g.getEmptyChar(),xySize,l, g);}
+    public void renderCycle(String emptyChar, String startX, String startY, long chunkSize, Logic l, Game g, Player player) {renderCycle(g.getPlayers(), g.getBoard(), emptyChar, startX, startY, chunkSize, l, g, player);}
+    public void renderCycle(String emptyChar, String[] xy, long chunkSize, Logic l, Game g, Player player) {renderCycle(emptyChar, xy[0], xy[1], chunkSize,l, g, player);}
+    public void renderCycle(String emptyChar, String[]xySize, Logic l, Game g, Player player) {renderCycle(emptyChar,xySize[0], xySize[1],l.StringToLong(xySize[2]),l, g, player);}
+    public void renderCycle(String startX, String startY, long chunkSize, Logic l, Game g, Player player) {renderCycle(g.getEmptyChar(), startX, startY, chunkSize,l, g, player);}
+    public void renderCycle(String[]xy, long chunkSize, Logic l, Game g, Player player) {renderCycle(g.getEmptyChar(),xy, chunkSize,l, g, player);}
+    public void renderCycle(String[]xySize, Logic l, Game g, Player player) {renderCycle(g.getEmptyChar(),xySize,l, g, player);}
     //endregion
 
 
@@ -55,11 +66,80 @@ public class Render {
      * @param chunkSize render reach
      * @param emptyChar filler char
      */
-    public void printChunk(ArrayList<String[]> board, String startX, String startY, long chunkSize, String emptyChar) {
-        //TODO
+    public void printChunk(ArrayList<String[]> board, String startX, String startY, long chunkSize, String emptyChar, Logic l, Game g) {
+        long Xpos = l.StringToLong(startX) - (chunkSize / 2);
+        long Ypos = l.StringToLong(startY) + (chunkSize / 2);
+        String spacing = " ";
+        spacing += fixSpace(Xpos, Ypos, chunkSize, l, board);
+        chunkSize++;
+        topInfo(chunkSize, l.StringToLong(startX), l, spacing);
+        for (long y = 0; y < chunkSize; y++) {
+            sideInfo(chunkSize, y, l.StringToLong(startY), l);
+            for ( long x = 0; x < chunkSize; x++) {
+
+                String[] pos = l.findPos(l.NumToString(Xpos), l.NumToString(Ypos), board);
+                if(pos != null) System.out.print(l.getPlayerByID(pos[2], g).getSymbol() + spacing);
+                else            System.out.print(emptyChar + spacing);
+
+
+                Xpos++;
+            }
+            Xpos = l.StringToLong(startX) - (chunkSize / 2);
+            System.out.println();
+            Ypos--;
+        }
+
     }
-    public void printChunk(ArrayList<String[]> board, String[]xy, long chunkSize, String emptyChar) {printChunk(board, xy[0], xy[1], chunkSize, emptyChar); }
-    public void printChunk(String[]xy, long chunkSize, String emptyChar, Game g) { printChunk(g.getBoard(),xy, chunkSize, emptyChar);}
+
+    private void sideInfo(long chunkSize, long y, long startNum, Logic l) {
+        long pPos = startNum + (y - (chunkSize /2));
+        if (pPos < 0) pPos = Math.abs(pPos); else pPos *= -1;
+        System.out.print(pPos + " ");
+        calcSpace(chunkSize, startNum, l, pPos);
+        System.out.print("|");
+    }
+
+    private void calcSpace(long chunkSize, long startNum, Logic l, long pPos) {
+        long spacingDiff =  l.NumToString(startNum + chunkSize).length() - l.NumToString(pPos).length();
+
+        for (int i = 0; i < spacingDiff; i++) {
+            System.out.print(" ");
+        }
+    }
+
+    private String fixSpace(long Xpos, long Ypos, long chunkSize, Logic l, ArrayList<String[]> board) {
+        StringBuilder result = new StringBuilder(" ");
+        long biggestLength = l.NumToString(Xpos).length();
+        for (long y = 0; y < chunkSize; y++) {
+            for (long x = 0; x < chunkSize; x++) {
+                String[] pos = l.findPos(l.NumToString(Xpos), l.NumToString(Ypos), board);
+                if(pos!= null && pos[0].length() > biggestLength) biggestLength = pos[0].length();
+            }
+        }
+        System.out.println(biggestLength);
+        for(long i = biggestLength; i != 0; i--) {
+            result.append(" ");
+        }
+        return result.toString();
+    }
+
+    private void topInfo(long chunkSize, long startNum, Logic l, String spacing) {
+        System.out.print("    ");
+        calcSpace(chunkSize, startNum, l, startNum+chunkSize);
+        for (long top = 0; top < chunkSize; top++) {
+            System.out.print(startNum-(chunkSize/2)+spacing);
+            startNum++;
+        }
+        System.out.println();
+        System.out.print("    ");
+        for (long top = 0; top < chunkSize; top++) {
+            System.out.print("-----");
+        }
+        System.out.println();
+    }
+
+    public void printChunk(ArrayList<String[]> board, String[]xy, long chunkSize, String emptyChar, Logic l, Game g) {printChunk(board, xy[0], xy[1], chunkSize, emptyChar, l, g); }
+    public void printChunk(String[]xy, long chunkSize, String emptyChar, Game g, Logic l) { printChunk(g.getBoard(),xy, chunkSize, emptyChar, l, g);}
 
     //--------- TEST ------------
 

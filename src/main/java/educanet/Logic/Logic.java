@@ -2,7 +2,6 @@ package educanet.Logic;
 
 import educanet.Player.*;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Logic {
@@ -14,7 +13,7 @@ public class Logic {
     /**
      * checks if last player has won
      */
-    public boolean checkWin(Player currentPlayer, ArrayList<String[]> board, int dir, Game g) {
+    public boolean checkWin(Player currentPlayer, ArrayList<String[]> board, Game g) {
         //TODO
         //search from the last played point of the player into all 4 direction for an unbroken chain of X players symbols
 
@@ -25,20 +24,62 @@ public class Logic {
 
         return false;
     }
-    public boolean checkWin(Player currentPlayer, ArrayList<String[]> board, Game g) {return checkWin(currentPlayer, board, 0, g);}
 
 
     public boolean checkDir(int Dir, ArrayList<String[]> board, Game g, Player player) {
-        int symbolCount = 1;
-
         String[] lastPlayOfPlayer = player.getLastPlay();
         if (lastPlayOfPlayer == null) return false;
 
 
-        //todo
+        //create based on selection
+        switch (Dir) {
+            case 0 -> {
+                return checkVert();
+            }
+            case 1 -> {
+                return checkDiag();
+            }
+            case 2 -> {
+                return checkHorizontal();
+            }
+            case 3 -> {
+                return checkAntiDiag();
+            }
+        } //switch end
 
-        return symbolCount == g.symbolWinCount;
+        return false;
     }
+
+
+
+    public boolean checkVert() {
+
+
+
+        return false;
+    }
+
+    private boolean checkDiag() {
+
+
+
+        return false;
+    }
+
+    private boolean checkHorizontal() {
+
+
+
+        return false;
+    }
+
+    private boolean checkAntiDiag() {
+
+
+
+        return false;
+    }
+
 
     public boolean checkWinTwo(Player player, ArrayList<String[]> board, Game g) {
         String[] lastPlayOfPlayer = player.getLastPlay();
@@ -49,9 +90,9 @@ public class Logic {
         int symbolCount = 1;
         String s = player.getID();
         int n = g.symbolWinCount;
-
+        long i = StringToLong(g.lastPlay[0]);
         //check col
-        for(int i = 0; i < n; i++){
+        for(; i < n; i++){
             if(findPos(x,NumToString(i),g) == null) break;
             if(!findPos(x,NumToString(i),g)[2].equals(s))
                 break;
@@ -61,7 +102,7 @@ public class Logic {
         }
 
         //check row
-        for(int i = 0; i < n; i++){
+        for(; i < n; i++){
             if(findPos(NumToString(i),y,g) == null) break;
             if(!findPos(NumToString(i),y,g)[2].equals(s))
                 break;
@@ -73,7 +114,7 @@ public class Logic {
         //check diag
         if(x.equals(y)){
             //we're on a diagonal
-            for(int i = 0; i < n; i++){
+            for(; i < n; i++){
                 if(findPos(NumToString(i),NumToString(i),g) == null) break;
                 if(!findPos(NumToString(i),NumToString(i),g)[2].equals(s))
                     break;
@@ -85,7 +126,7 @@ public class Logic {
 
         //check anti diag
         if(NumToString(StringToLong(x) + StringToLong(y)).equals(NumToString(n-1))){
-            for(int i = 0; i < n; i++){
+            for(; i < n; i++){
                 if(findPos(NumToString(i),NumToString((n-1)-i),g) == null) break;
                 if(!findPos(NumToString(i),NumToString((n-1)-i),g)[2].equals(s))
                     break;
@@ -102,11 +143,11 @@ public class Logic {
     /**
      * Makes the play on the board and saves it into the players history of plays
      */
-    public void play(String x, String y, Player player, Board b) {
+    public void play(String x, String y, Player player, Board b, Game g) {
         b.play(player.getID(), x, y);
         player.savePlay(x,y);
     }
-    public void play(String[] xy, Player player, Board b) {play(xy[0], xy[1], player, b);}
+    public void play(String[] xy, Player player, Board b, Game g) {play(xy[0], xy[1], player, b, g);}
 
     /**
      * Checks if there are players or if the player is alone. (either gives option to exit, add more, or if the player is alone, adds a Hard AI)
@@ -151,7 +192,7 @@ public class Logic {
 
     public String[] choosePosition(Scanner sc) {
         String x,y;
-        x = y = "";
+        x = y = null;
         while(true) {
 
             System.out.println("Where do you want to put your symbol?");
@@ -407,7 +448,7 @@ public class Logic {
             int randomSymbol = new Random().nextInt(alphabet.length);
             mastermindSymbol = Character.toString(alphabet[randomSymbol]);
         }
-        g.players.add(new AI("mastermind",mastermindSymbol,"1", 3));
+        g.players.add(new AI("mastermind",mastermindSymbol,"2", 3));
     }
 
     /**

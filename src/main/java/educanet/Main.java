@@ -9,13 +9,12 @@ public class Main {
     LOGIC TODO:
     - repair checkWin();
     - 0;0 is centered
-    -check win to work with negative values
+    -check win repairs
 
    RENDER TODO:
     - render logic (probably render area around last play || around current players last play || at selected location)
+    both around last play and around last players play.
     - look of board
-    - either render with something later (swing || awt) || do some beautiful console fuckery to atleast make it bearable
-      (more into console tbh, too much hassle otherwise)
 
     AI TODO:
     - everything.... holy fuck.

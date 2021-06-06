@@ -20,7 +20,7 @@ public class Human extends Player{
             System.out.println("Position already occupied by "+occupant.getName()+" ("+occupant.getSymbol()+"). choose another");
             turn(sc, l , b, g);
         }
-        l.play(pos, this, b);
+        l.play(pos, this, b, g);
 
     }
 

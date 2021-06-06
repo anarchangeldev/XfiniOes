@@ -7,18 +7,19 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Game {
-    public  Logic l = new Logic();
-    public  Board b = new Board();
-    public  Render r = new Render();
+    public Logic l = new Logic();
+    public Board b = new Board();
+    public Render r = new Render();
 
-    public  ArrayList<Player> players = new ArrayList<>();
-    public  ArrayList<String> usedSymbols = new ArrayList<>();
-    public  ArrayList<String[]> board = new ArrayList<>();
+    public ArrayList<Player> players = new ArrayList<>();
+    public ArrayList<String> usedSymbols = new ArrayList<>();
+    public ArrayList<String[]> board = new ArrayList<>();
 
-    public  long turns = 0;
-    public  int symbolWinCount = 4;
+    public long turns = 0;
+    public int symbolWinCount = 4;
 
-    public  String emptyChar = "-";
+    public String emptyChar = "-";
+    public String[] lastPlay = new String[]{"0","0","0"};
 
 
     public void init() {
@@ -37,8 +38,11 @@ public class Game {
         while(wonID.equals("0")) {
             for(Player player : players) {
                 turns++;
-                //Render.renderCycle(emptyChar);
+                r.renderCycle(players, board, emptyChar, lastPlay[0], lastPlay[1], 16, l, this, player);
                 l.turn(player, sc, b, this);
+                if(player.getLastPlay() != null) {
+                    lastPlay = new String[]{player.getLastPlay()[0],player.getLastPlay()[1], player.getID()};
+                }
                 board = b.getBoardList();
                 if(l.checkWinTwo(player,board, this)) wonID = player.getID();
             }
@@ -71,6 +75,9 @@ public class Game {
     }
 
     public String getEmptyChar() { return emptyChar; }
+
+    public String[] getLastPlay() { return lastPlay; }
+
     //endregion
 
 //-----------------------------------------
@@ -79,14 +86,14 @@ public class Game {
     //region testbed
     public void test(Scanner sc) {
 
-        l.play("10", "10", new Player("test 1", "x", "1"), b);
-        l.play("2", "4",   new Player("test 2", "o", "2"), b);
-        l.play("0","0",    new Player("test 3", "z", "3"), b);
-        l.play("30","0",   new Player("test 4", "s", "4"), b);
-        l.play("15", "5",  new Player("test 5", "a", "5"), b);
-        l.play("9", "10",  new Player("test 1", "x", "1"), b);
-        l.play("8", "10",  new Player("test 1", "x", "1"), b);
-        l.play("7", "10",  new Player("test 1", "x", "1"), b);
+        l.play("10", "10", new Player("test 1", "x", "1"), b, this);
+        l.play("2", "4",   new Player("test 2", "o", "2"), b, this);
+        l.play("0","0",    new Player("test 3", "z", "3"), b, this);
+        l.play("30","0",   new Player("test 4", "s", "4"), b, this);
+        l.play("15", "5",  new Player("test 5", "a", "5"), b, this);
+        l.play("9", "10",  new Player("test 1", "x", "1"), b, this);
+        l.play("8", "10",  new Player("test 1", "x", "1"), b, this);
+        l.play("7", "10",  new Player("test 1", "x", "1"), b, this);
 
 
         System.out.println("----------------------");

@@ -17,9 +17,9 @@ public class Render {
         showPlayers(players);
         String[] playersLastPlay = player.getLastPlay();
         if(playersLastPlay != null) {
-            System.out.println("last global play:\n\n");
+            System.out.println("last global play:\n");
             printChunk(board, startX, startY, chunkSize, emptyChar, l, g);
-            System.out.println("\n\nYour last play:\n\n");
+            System.out.println("\nYour last play:\n");
             printChunk(board, playersLastPlay[0], playersLastPlay[1], chunkSize, emptyChar, l, g);
         } else {
             printChunk(board, startX, startY, chunkSize, emptyChar, l, g);

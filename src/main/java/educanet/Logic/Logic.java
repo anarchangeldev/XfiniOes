@@ -14,9 +14,7 @@ public class Logic {
      * checks if last player has won
      */
     public boolean checkWin(Player currentPlayer, ArrayList<String[]> board, Game g) {
-        //TODO
         //search from the last played point of the player into all 4 direction for an unbroken chain of X players symbols
-
         //check 4 directions (horizontal, vert, diagonals) in both sides
         for (int i = 0; i < 4; i++) {
             if(checkDir(i, board, g, currentPlayer)) return true;
@@ -26,24 +24,22 @@ public class Logic {
     }
 
 
-    public boolean checkDir(int Dir, ArrayList<String[]> board, Game g, Player player) {
+    public boolean checkDir(int dir, ArrayList<String[]> board, Game g, Player player) {
         String[] lastPlayOfPlayer = player.getLastPlay();
         if (lastPlayOfPlayer == null) return false;
 
-
-        //create based on selection
-        switch (Dir) {
+        switch (dir) {
             case 0 -> {
-                return checkVert();
+                return checkVert(lastPlayOfPlayer, player, board, g);
             }
             case 1 -> {
-                return checkDiag();
+                return checkDiag(lastPlayOfPlayer, player, board, g);
             }
             case 2 -> {
-                return checkHorizontal();
+                return checkHorizontal(lastPlayOfPlayer, player, board, g);
             }
             case 3 -> {
-                return checkAntiDiag();
+                return checkAntiDiag(lastPlayOfPlayer, player, board, g);
             }
         } //switch end
 
@@ -51,31 +47,46 @@ public class Logic {
     }
 
 
+    // THIS SHIT DOESNT FUCKING WORK I WANT TO KILL MYSELF, FUCK THIS
+    public boolean checkVert(String[] lastPlay, Player player, ArrayList<String[]> board, Game g) {
+        boolean result = true;
+        ArrayList<String> IDs = new ArrayList<>();
+        for (int i = -(g.symbolWinCount / 2); i < g.symbolWinCount/2; i++) {
+            for (long y = StringToLong(lastPlay[1]); y < g.symbolWinCount; y++) {
+                System.out.println("calculating Vert at: " + lastPlay[0] + " | " + y);
+                String[] pos = findPos(lastPlay[0], NumToString(y), board);
+                if (pos == null) continue;
+                IDs.add(pos[2]);
+            }
+        }
 
-    public boolean checkVert() {
+        for (String ID : IDs) {
+            if (!ID.equals(player.getID())) {
+                result = false;
+                break;
+            }
+        }
+        if(IDs.size() < g.symbolWinCount) return false;
+        return result;
+    }
 
+    private boolean checkDiag(String[] lastPlay, Player player, ArrayList<String[]> board, Game g) {
 
+        //TODO
 
         return false;
     }
 
-    private boolean checkDiag() {
+    private boolean checkHorizontal(String[] lastPlay, Player player, ArrayList<String[]> board, Game g) {
 
-
-
-        return false;
-    }
-
-    private boolean checkHorizontal() {
-
-
+        //TODO
 
         return false;
     }
 
-    private boolean checkAntiDiag() {
+    private boolean checkAntiDiag(String[] lastPlay, Player player, ArrayList<String[]> board, Game g) {
 
-
+        //TODO
 
         return false;
     }

@@ -47,7 +47,7 @@ public class Logic {
     }
 
 
-    // THIS SHIT DOESNT FUCKING WORK I WANT TO KILL MYSELF, FUCK THIS
+    // Doesnt Work
     public boolean checkVert(String[] lastPlay, Player player, ArrayList<String[]> board, Game g) {
         boolean result = true;
         ArrayList<String> IDs = new ArrayList<>();
